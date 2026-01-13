@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Learn Greek Alphabet</title>
+    <title>It's All Greek to Me</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=GFS+Didot&family=Roboto:wght@400;700&family=Playfair+Display:wght@700&family=Crimson+Text:wght@600&family=EB+Garamond:wght@500&family=Libre+Baskerville:wght@700&family=Cinzel:wght@600&family=Cormorant+Garamond:wght@600&family=Spectral:wght@600&family=Merriweather:wght@700&family=Lora:wght@600&family=Source+Serif+Pro:wght@600&family=Gentium+Book+Plus:wght@700&display=swap');
@@ -113,6 +113,80 @@
         .transliteration.revealed {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        .audio-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .audio-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .audio-btn:active {
+            transform: scale(0.95);
+        }
+
+        .audio-btn .tooltip {
+            visibility: hidden;
+            background-color: #4a5568;
+            color: white;
+            text-align: center;
+            padding: 8px 12px;
+            border-radius: 6px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .audio-btn .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #4a5568 transparent transparent transparent;
+        }
+
+        .audio-btn:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .audio-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2em;
+            }
         }
 
         .spelling {
@@ -268,11 +342,19 @@
 </head>
 <body>
     <div class="container">
-        <h1>🏛️ Learn Greek Alphabet</h1>
+        <h1>🏛️ It's All Greek to Me</h1>
 
         <div class="greek-word" id="greekWord"></div>
 
-        <div class="transliteration" id="transliteration"></div>
+        <div class="transliteration" id="transliteration">
+            <div class="audio-container" id="audioContainer" style="display: none;">
+                <span id="transliterationText"></span>
+                <button class="audio-btn" id="audioBtn" onclick="speakGreek()">
+                    🔊
+                    <span class="tooltip">Hear Modern Greek pronunciation</span>
+                </button>
+            </div>
+        </div>
 
         <div class="spelling" id="spelling"></div>
 
@@ -652,12 +734,28 @@
 
         const greekWordEl = document.getElementById('greekWord');
         const transliterationEl = document.getElementById('transliteration');
+        const transliterationTextEl = document.getElementById('transliterationText');
+        const audioContainerEl = document.getElementById('audioContainer');
         const spellingEl = document.getElementById('spelling');
         const explanationEl = document.getElementById('explanation');
         const actionBtn = document.getElementById('actionBtn');
         const milestoneEl = document.getElementById('milestone');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
+
+        function speakGreek() {
+            if (!currentWord) return;
+
+            // Cancel any ongoing speech
+            window.speechSynthesis.cancel();
+
+            // Create utterance with the Greek word
+            const utterance = new SpeechSynthesisUtterance(currentWord.greek);
+            utterance.lang = 'el-GR'; // Modern Greek
+            utterance.rate = 0.8; // Slightly slower for clarity
+
+            window.speechSynthesis.speak(utterance);
+        }
 
         // Greek letter to name mapping
         const greekLetterNames = {
@@ -792,7 +890,8 @@
             greekWordEl.textContent = getRandomCase(currentWord.greek);
 
             // Hide transliteration, spelling, and explanation initially
-            transliterationEl.textContent = '';
+            transliterationTextEl.textContent = '';
+            audioContainerEl.style.display = 'none';
             transliterationEl.classList.remove('revealed');
             spellingEl.textContent = '';
             spellingEl.classList.remove('revealed');
@@ -821,7 +920,8 @@
 
         function revealAnswer() {
             revealed = true;
-            transliterationEl.textContent = currentWord.transliteration;
+            transliterationTextEl.textContent = currentWord.transliteration;
+            audioContainerEl.style.display = 'inline-flex';
             transliterationEl.classList.add('revealed');
             spellingEl.textContent = getLetterSpelling(currentWord.greek);
             spellingEl.classList.add('revealed');

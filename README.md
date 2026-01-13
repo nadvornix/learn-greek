@@ -1,4 +1,4 @@
-# 🏛️ Learn Greek Alphabet
+# 🏛️ It's All Greek to Me
 
 An interactive web application for learning the Greek alphabet and ancient Greek vocabulary. Features 493 Greek words including mythology, gods, cities, scientific terms, medical terminology, and philosophical concepts.
 
@@ -18,6 +18,7 @@ An interactive web application for learning the Greek alphabet and ancient Greek
   - Flashcard-style interface
   - Greek word display with random fonts (16 different serif fonts)
   - Transliteration (romanized pronunciation)
+  - Audio pronunciation (browser-generated Modern Greek)
   - Letter-by-letter spelling (Alpha, Beta, Gamma...)
   - Detailed explanations with English derivatives
 
