@@ -1,15 +1,3 @@
-# Dependencies
-node_modules/
-
-# Build outputs
-android/app/build/
-android/build/
-android/.gradle/
-
-# Logs
-*.log
-npm-debug.log*
-
 # OS files
 .DS_Store
 Thumbs.db
@@ -20,9 +8,5 @@ Thumbs.db
 *.swp
 *.swo
 
-# Environment
-.env
-.env.local
-
-# Capacitor
-android/app/src/main/assets/public/
+# Logs
+*.log
