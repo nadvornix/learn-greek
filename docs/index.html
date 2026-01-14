@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4ZLFH2GPWP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-4ZLFH2GPWP');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>It's All Greek to Me</title>
@@ -132,8 +141,9 @@
             font-size: 1em;
             transition: all 0.2s ease;
             position: relative;
-            padding: 0;
+            padding: 0 2px 2px 2px;
             opacity: 0.6;
+            border-bottom: 1px dotted #667eea;
         }
 
         .audio-btn:hover {
@@ -147,20 +157,22 @@
 
         .audio-btn .tooltip {
             visibility: hidden;
-            background-color: #4a5568;
+            background-color: #2d3748;
             color: white;
-            text-align: center;
-            padding: 8px 12px;
-            border-radius: 6px;
+            text-align: left;
+            padding: 12px 16px;
+            border-radius: 8px;
             position: absolute;
-            z-index: 1;
-            bottom: 125%;
+            z-index: 10;
+            bottom: 140%;
             left: 50%;
             transform: translateX(-50%);
             white-space: nowrap;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: opacity 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            min-width: 180px;
         }
 
         .audio-btn .tooltip::after {
@@ -168,15 +180,31 @@
             position: absolute;
             top: 100%;
             left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
+            margin-left: -6px;
+            border-width: 6px;
             border-style: solid;
-            border-color: #4a5568 transparent transparent transparent;
+            border-color: #2d3748 transparent transparent transparent;
         }
 
         .audio-btn:hover .tooltip {
             visibility: visible;
             opacity: 1;
+        }
+
+        .tooltip-label {
+            color: #a0aec0;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .tooltip-pron {
+            margin-bottom: 6px;
+        }
+
+        .tooltip-pron:last-child {
+            margin-bottom: 0;
         }
 
         @media (max-width: 768px) {
@@ -202,6 +230,52 @@
         .spelling.revealed {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        .letter-with-tip {
+            position: relative;
+            cursor: help;
+            border-bottom: 1px dotted #805ad5;
+        }
+
+        .letter-with-tip:hover {
+            color: #667eea;
+        }
+
+        .letter-tip {
+            visibility: hidden;
+            background-color: #2d3748;
+            color: white;
+            text-align: left;
+            padding: 10px 14px;
+            border-radius: 8px;
+            position: absolute;
+            z-index: 10;
+            bottom: 130%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-size: 0.8rem;
+            font-style: normal;
+            opacity: 0;
+            transition: opacity 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .letter-tip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #2d3748 transparent transparent transparent;
+        }
+
+        .letter-with-tip:hover .letter-tip {
+            visibility: visible;
+            opacity: 1;
         }
 
         .explanation {
@@ -248,6 +322,17 @@
             color: #a0aec0;
             font-size: 0.9em;
             margin-top: 10px;
+        }
+
+        .guide-link {
+            color: #a0aec0;
+            font-size: 0.9em;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .guide-link:hover {
+            color: #667eea;
         }
 
         .navigation {
@@ -311,6 +396,10 @@
             <a class="prev-link" id="prevBtn" onclick="goToPrevious()" style="display: none;">← Previous</a>
             <button class="btn" id="actionBtn">Reveal</button>
         </div>
+
+        <p style="margin-top: 30px;">
+            <a href="pronunciation.html" class="guide-link">How to pronounce Greek →</a>
+        </p>
     </div>
 
     <script>
@@ -576,7 +665,7 @@
 
             // More Cities & Places
             { greek: "Ῥόδος", transliteration: "Rhodes", explanation: "Island with ancient Colossus" },
-            { greek: "Κῦρος", transliteration: "Cyprus", explanation: "Island birthplace of Aphrodite" },
+            { greek: "Κύπρος", transliteration: "Kypros (Cyprus)", explanation: "Island birthplace of Aphrodite" },
             { greek: "Λέσβος", transliteration: "Lesbos", explanation: "Island home of poet Sappho" },
             { greek: "Σάμος", transliteration: "Samos", explanation: "Island birthplace of Pythagoras" },
             { greek: "Μίλητος", transliteration: "Miletus", explanation: "Birthplace of philosophy" },
@@ -723,9 +812,36 @@
             'Ω': 'Omega', 'ω': 'omega'
         };
 
+        // Diacritical mark descriptions (Unicode combining characters)
+        const diacriticalMarks = {
+            '\u0300': 'grave accent (stress)',
+            '\u0301': 'acute accent (stress)',
+            '\u0302': 'circumflex',
+            '\u0303': 'tilde',
+            '\u0304': 'macron (long vowel)',
+            '\u0306': 'breve (short vowel)',
+            '\u0308': 'diaeresis (separate vowel)',
+            '\u0313': 'smooth breathing (no h)',
+            '\u0314': 'rough breathing (add h)',
+            '\u0342': 'circumflex (pitch rise-fall)',
+            '\u0345': 'iota subscript (silent iota)'
+        };
+
         function normalizeGreekChar(char) {
             // Remove diacritical marks by normalizing to NFD and removing combining characters
             return char.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        }
+
+        function getDiacriticalInfo(char) {
+            const normalized = char.normalize('NFD');
+            const marks = [];
+            for (let i = 1; i < normalized.length; i++) {
+                const code = normalized[i];
+                if (diacriticalMarks[code]) {
+                    marks.push(diacriticalMarks[code]);
+                }
+            }
+            return marks;
         }
 
         function getLetterSpelling(word) {
@@ -733,10 +849,384 @@
             for (let char of word) {
                 const normalized = normalizeGreekChar(char);
                 if (greekLetterNames[normalized]) {
-                    letters.push(greekLetterNames[normalized]);
+                    const name = greekLetterNames[normalized];
+                    const marks = getDiacriticalInfo(char);
+                    if (marks.length > 0) {
+                        const tooltip = `${char} = ${name} with:\\n${marks.join('\\n')}`;
+                        letters.push(`<span class="letter-with-tip">${name}<span class="letter-tip">${char} = ${name}<br>+ ${marks.join('<br>+ ')}</span></span>`);
+                    } else {
+                        letters.push(name);
+                    }
                 }
             }
             return letters.join(' - ');
+        }
+
+        // Pronunciation lookup table (Classical / Modern)
+        const pronunciations = {
+            "Ζεύς": { classical: "ZDEWS", modern: "ZEFS" },
+            "Ἀθηνᾶ": { classical: "a-THAY-naa", modern: "a-thee-NAH" },
+            "Ἀπόλλων": { classical: "a-POL-lohn", modern: "a-POL-lon" },
+            "Ἄρτεμις": { classical: "AR-te-mis", modern: "AR-te-mees" },
+            "Ἄρης": { classical: "AR-ays", modern: "AR-ees" },
+            "Ἀφροδίτη": { classical: "aph-ro-DEE-tay", modern: "af-ro-THEE-tee" },
+            "Ἑρμῆς": { classical: "her-MAYS", modern: "er-MEES" },
+            "Ποσειδῶν": { classical: "po-say-DOHN", modern: "po-see-THON" },
+            "Ἥρα": { classical: "HAY-ra", modern: "EE-ra" },
+            "Ἥφαιστος": { classical: "HAY-phais-tos", modern: "EE-fes-tos" },
+            "Διόνυσος": { classical: "dee-O-noo-sos", modern: "thee-O-nee-sos" },
+            "Δημήτηρ": { classical: "day-MAY-tayr", modern: "thee-MEE-teer" },
+            "Ἅιδης": { classical: "HAH-ee-days", modern: "AH-ee-thees" },
+            "Ἑστία": { classical: "hes-TEE-a", modern: "es-TEE-a" },
+            "Περσεφόνη": { classical: "per-se-PHO-nay", modern: "per-se-FO-nee" },
+            "Ἡρακλῆς": { classical: "hay-ra-KLAYS", modern: "ee-ra-KLEES" },
+            "Προμηθεύς": { classical: "pro-may-THEWS", modern: "pro-mee-THEFS" },
+            "Πανδώρα": { classical: "pan-DOH-ra", modern: "pan-THO-ra" },
+            "Ὀδυσσεύς": { classical: "o-doos-SEWS", modern: "o-thee-SEFS" },
+            "Ἀχιλλεύς": { classical: "a-khil-LEWS", modern: "a-hee-LEFS" },
+            "Ἀθῆναι": { classical: "a-THAY-nai", modern: "a-THEE-ne" },
+            "Σπάρτη": { classical: "SPAR-tay", modern: "SPAR-tee" },
+            "Κόρινθος": { classical: "KO-rin-thos", modern: "KO-reen-thos" },
+            "Θῆβαι": { classical: "THAY-bai", modern: "THEE-ve" },
+            "Μυκῆναι": { classical: "moo-KAY-nai", modern: "mee-KEE-ne" },
+            "Δελφοί": { classical: "del-PHOY", modern: "thel-FEE" },
+            "Ὀλυμπία": { classical: "o-loom-PEE-a", modern: "o-leem-BEE-a" },
+            "Τροία": { classical: "TROY-a", modern: "TREE-a" },
+            "Μαραθών": { classical: "ma-ra-THOHN", modern: "ma-ra-THON" },
+            "Κρήτη": { classical: "KRAY-tay", modern: "KREE-tee" },
+            "Ἄλφα": { classical: "AL-pha", modern: "AL-fa" },
+            "Βῆτα": { classical: "BAY-ta", modern: "VEE-ta" },
+            "Γάμμα": { classical: "GAM-ma", modern: "GHAH-ma" },
+            "Δέλτα": { classical: "DEL-ta", modern: "THEL-ta" },
+            "Ἔψιλον": { classical: "EP-see-lon", modern: "EP-see-lon" },
+            "Ζῆτα": { classical: "ZDAH-ta", modern: "ZEE-ta" },
+            "Ἦτα": { classical: "AY-ta", modern: "EE-ta" },
+            "Θῆτα": { classical: "THAY-ta", modern: "THEE-ta" },
+            "Ἰῶτα": { classical: "ee-OH-ta", modern: "YO-ta" },
+            "Κάππα": { classical: "KAP-pa", modern: "KA-pa" },
+            "Λάμβδα": { classical: "LAM-bda", modern: "LAM-tha" },
+            "Μῦ": { classical: "MOO", modern: "MEE" },
+            "Νῦ": { classical: "NOO", modern: "NEE" },
+            "Ξῖ": { classical: "KSEE", modern: "KSEE" },
+            "Ὄμικρον": { classical: "O-mik-ron", modern: "O-meek-ron" },
+            "Πῖ": { classical: "PEE", modern: "PEE" },
+            "Ῥῶ": { classical: "HROH", modern: "RO" },
+            "Σίγμα": { classical: "SIG-ma", modern: "SEEG-ma" },
+            "Ταῦ": { classical: "TAU", modern: "TAF" },
+            "Φῖ": { classical: "PHEE", modern: "FEE" },
+            "Χῖ": { classical: "KHEE", modern: "CHEE" },
+            "Ψῖ": { classical: "PSEE", modern: "PSEE" },
+            "Ὦμέγα": { classical: "oh-MEH-ga", modern: "o-MEH-gha" },
+            "φυσική": { classical: "phoo-see-KAY", modern: "fee-see-KEE" },
+            "μαθηματικά": { classical: "ma-thay-ma-tee-KA", modern: "ma-thee-ma-tee-KA" },
+            "φιλοσοφία": { classical: "phee-lo-so-PHEE-a", modern: "fee-lo-so-FEE-a" },
+            "βιολογία": { classical: "bee-o-lo-GEE-a", modern: "vee-o-lo-YEE-a" },
+            "γεωμετρία": { classical: "geh-oh-met-REE-a", modern: "ye-o-met-REE-a" },
+            "ἄτομος": { classical: "A-to-mos", modern: "A-to-mos" },
+            "χημεία": { classical: "khay-MAY-a", modern: "hee-MEE-a" },
+            "ψυχολογία": { classical: "psoo-kho-lo-GEE-a", modern: "psee-ho-lo-YEE-a" },
+            "ἱστορία": { classical: "his-to-REE-a", modern: "ees-to-REE-a" },
+            "θεολογία": { classical: "the-o-lo-GEE-a", modern: "the-o-lo-YEE-a" },
+            "ἀνατομία": { classical: "a-na-to-MEE-a", modern: "a-na-to-MEE-a" },
+            "ἀστρονομία": { classical: "as-tro-no-MEE-a", modern: "as-tro-no-MEE-a" },
+            "γεωγραφία": { classical: "geh-oh-gra-PHEE-a", modern: "ye-o-ghra-FEE-a" },
+            "ἀρχαιολογία": { classical: "ar-khai-o-lo-GEE-a", modern: "ar-he-o-lo-YEE-a" },
+            "ἐνέργεια": { classical: "en-ER-gay-a", modern: "en-ER-yee-a" },
+            "φαρμακεία": { classical: "phar-ma-KAY-a", modern: "far-ma-KEE-a" },
+            "βοτανική": { classical: "bo-ta-nee-KAY", modern: "vo-ta-nee-KEE" },
+            "ζωολογία": { classical: "dzoh-o-lo-GEE-a", modern: "zo-o-lo-YEE-a" },
+            "γενετική": { classical: "ge-ne-tee-KAY", modern: "ye-ne-tee-KEE" },
+            "τεχνολογία": { classical: "tekh-no-lo-GEE-a", modern: "teh-no-lo-YEE-a" },
+            "καρδία": { classical: "kar-DEE-a", modern: "kar-THEE-a" },
+            "νεῦρον": { classical: "NEW-ron", modern: "NEV-ron" },
+            "δέρμα": { classical: "DER-ma", modern: "THER-ma" },
+            "ὀστέον": { classical: "os-TE-on", modern: "os-TE-on" },
+            "γαστήρ": { classical: "gas-TAYR", modern: "ghas-TEER" },
+            "ἧπαρ": { classical: "HAY-par", modern: "EE-par" },
+            "νεφρός": { classical: "neph-ROS", modern: "nef-ROS" },
+            "πνεύμων": { classical: "PNEW-mohn", modern: "PNEV-mon" },
+            "ὀφθαλμός": { classical: "oph-thal-MOS", modern: "of-thal-MOS" },
+            "ὀδούς": { classical: "o-DOOS", modern: "o-THOOS" },
+            "αἷμα": { classical: "HAI-ma", modern: "EH-ma" },
+            "ψυχή": { classical: "psoo-KHAY", modern: "psee-HEE" },
+            "κεφαλή": { classical: "ke-pha-LAY", modern: "ke-fa-LEE" },
+            "θώραξ": { classical: "THOH-raks", modern: "THO-raks" },
+            "ἀρθρῖτις": { classical: "arth-REE-tis", modern: "arth-REE-tees" },
+            "δῆμος": { classical: "DAY-mos", modern: "THEE-mos" },
+            "κράτος": { classical: "KRA-tos", modern: "KRA-tos" },
+            "πόλις": { classical: "PO-lis", modern: "PO-lees" },
+            "ἀγορά": { classical: "a-go-RA", modern: "a-gho-RA" },
+            "θέατρον": { classical: "THE-at-ron", modern: "THE-at-ron" },
+            "στάδιον": { classical: "STA-dee-on", modern: "STA-thee-on" },
+            "γυμνάσιον": { classical: "goom-NA-see-on", modern: "yeem-NA-see-on" },
+            "μουσεῖον": { classical: "moo-SAY-on", modern: "moo-SEE-on" },
+            "βιβλίον": { classical: "beeb-LEE-on", modern: "veev-LEE-on" },
+            "σχολή": { classical: "skho-LAY", modern: "sho-LEE" },
+            "ὁδός": { classical: "ho-DOS", modern: "o-THOS" },
+            "λόγος": { classical: "LO-gos", modern: "LO-ghos" },
+            "νόμος": { classical: "NO-mos", modern: "NO-mos" },
+            "τέχνη": { classical: "TEKH-nay", modern: "TEH-nee" },
+            "ἦθος": { classical: "AY-thos", modern: "EE-thos" },
+            "πάθος": { classical: "PA-thos", modern: "PA-thos" },
+            "ἀρχή": { classical: "ar-KHAY", modern: "ar-HEE" },
+            "τέλος": { classical: "TE-los", modern: "TE-los" },
+            "κόσμος": { classical: "KOS-mos", modern: "KOZ-mos" },
+            "χάος": { classical: "KHA-os", modern: "HA-os" },
+            "ἰδέα": { classical: "ee-DE-a", modern: "ee-THE-a" },
+            "θεωρία": { classical: "the-oh-REE-a", modern: "the-o-REE-a" },
+            "πρᾶξις": { classical: "PRAK-sis", modern: "PRAK-sees" },
+            "μῦθος": { classical: "MOO-thos", modern: "MEE-thos" },
+            "ἥρως": { classical: "HAY-rohs", modern: "EE-ros" },
+            "τραγῳδία": { classical: "tra-GOH-dee-a", modern: "tra-gho-THEE-a" },
+            "κωμῳδία": { classical: "koh-MOH-dee-a", modern: "ko-mo-THEE-a" },
+            "ποίησις": { classical: "POY-ay-sis", modern: "PEE-ee-sees" },
+            "μουσική": { classical: "moo-see-KAY", modern: "moo-see-KEE" },
+            "ῥυθμός": { classical: "hrooth-MOS", modern: "reeth-MOS" },
+            "μέλος": { classical: "ME-los", modern: "ME-los" },
+            "χορός": { classical: "kho-ROS", modern: "ho-ROS" },
+            "εἰκών": { classical: "ay-KOHN", modern: "ee-KON" },
+            "σύμβολον": { classical: "SOOM-bo-lon", modern: "SEEM-vo-lon" },
+            "παράδειγμα": { classical: "pa-RA-dayg-ma", modern: "pa-RA-theeg-ma" },
+            "κριτήριον": { classical: "kree-TAY-ree-on", modern: "kree-TEE-ree-on" },
+            "κανών": { classical: "ka-NOHN", modern: "ka-NON" },
+            "δόγμα": { classical: "DOG-ma", modern: "THOG-ma" },
+            "σχῆμα": { classical: "SKHAY-ma", modern: "SHEE-ma" },
+            "κλῖμα": { classical: "KLEE-ma", modern: "KLEE-ma" },
+            "ἀτμός": { classical: "at-MOS", modern: "at-MOS" },
+            "σφαῖρα": { classical: "SPHAI-ra", modern: "SFEH-ra" },
+            "κύκλος": { classical: "KOO-klos", modern: "KEE-klos" },
+            "κέντρον": { classical: "KEN-tron", modern: "KEN-tron" },
+            "ὁρίζων": { classical: "ho-REE-dzohn", modern: "o-REE-zon" },
+            "μέτρον": { classical: "MET-ron", modern: "MET-ron" },
+            "ἀριθμός": { classical: "a-reeth-MOS", modern: "a-reeth-MOS" },
+            "μονάς": { classical: "mo-NAS", modern: "mo-NAS" },
+            "δυάς": { classical: "doo-AS", modern: "thee-AS" },
+            "τριάς": { classical: "tree-AS", modern: "tree-AS" },
+            "πολύς": { classical: "po-LOOS", modern: "po-LEES" },
+            "ὀλίγος": { classical: "o-LEE-gos", modern: "o-LEE-ghos" },
+            "μέγας": { classical: "ME-gas", modern: "ME-ghas" },
+            "μικρός": { classical: "mik-ROS", modern: "meek-ROS" },
+            "μακρός": { classical: "mak-ROS", modern: "mak-ROS" },
+            "βραχύς": { classical: "bra-KHOOS", modern: "vra-HEES" },
+            "ἰσός": { classical: "ee-SOS", modern: "ee-SOS" },
+            "ὅμοιος": { classical: "HO-moy-os", modern: "O-mee-os" },
+            "ἕτερος": { classical: "HE-te-ros", modern: "E-te-ros" },
+            "καινός": { classical: "kai-NOS", modern: "ke-NOS" },
+            "παλαιός": { classical: "pa-lai-OS", modern: "pa-le-OS" },
+            "νέος": { classical: "NE-os", modern: "NE-os" },
+            "ἀρχαῖος": { classical: "ar-KHAI-os", modern: "ar-HE-os" },
+            "σοφία": { classical: "so-PHEE-a", modern: "so-FEE-a" },
+            "γνῶσις": { classical: "GNOH-sis", modern: "GNO-sees" },
+            "ἐπιστήμη": { classical: "e-pis-TAY-may", modern: "e-pees-TEE-mee" },
+            "δόξα": { classical: "DOK-sa", modern: "THOK-sa" },
+            "ἀλήθεια": { classical: "a-LAY-thay-a", modern: "a-LEE-thee-a" },
+            "ψεῦδος": { classical: "PSEW-dos", modern: "PSEV-thos" },
+            "οὐσία": { classical: "oo-SEE-a", modern: "oo-SEE-a" },
+            "ὕλη": { classical: "HOO-lay", modern: "EE-lee" },
+            "μορφή": { classical: "mor-PHAY", modern: "mor-FEE" },
+            "αἰτία": { classical: "ai-TEE-a", modern: "e-TEE-a" },
+            "τύχη": { classical: "TOO-khay", modern: "TEE-hee" },
+            "ἀνάγκη": { classical: "a-NAN-kay", modern: "a-NAN-gee" },
+            "ἐλευθερία": { classical: "e-lew-the-REE-a", modern: "e-lef-the-REE-a" },
+            "δικαιοσύνη": { classical: "dee-kai-o-SOO-nay", modern: "thee-ke-o-SEE-nee" },
+            "ἀρετή": { classical: "a-re-TAY", modern: "a-re-TEE" },
+            "κακία": { classical: "ka-KEE-a", modern: "ka-KEE-a" },
+            "καλός": { classical: "ka-LOS", modern: "ka-LOS" },
+            "αἰσχρός": { classical: "AIS-khros", modern: "ES-hros" },
+            "ἀγαθός": { classical: "a-ga-THOS", modern: "a-gha-THOS" },
+            "κακός": { classical: "ka-KOS", modern: "ka-KOS" },
+            "πυρετός": { classical: "poo-re-TOS", modern: "pee-re-TOS" },
+            "θερμός": { classical: "ther-MOS", modern: "ther-MOS" },
+            "κρυός": { classical: "kroo-OS", modern: "kree-OS" },
+            "ὕδωρ": { classical: "HOO-dohr", modern: "EE-thor" },
+            "πῦρ": { classical: "POOR", modern: "PEER" },
+            "γῆ": { classical: "GAY", modern: "YEE" },
+            "ἀήρ": { classical: "a-AYR", modern: "a-EER" },
+            "φῶς": { classical: "PHOHS", modern: "FOS" },
+            "σκότος": { classical: "SKO-tos", modern: "SKO-tos" },
+            "χρῶμα": { classical: "KHROH-ma", modern: "HRO-ma" },
+            "φωνή": { classical: "phoh-NAY", modern: "fo-NEE" },
+            "γραφή": { classical: "gra-PHAY", modern: "ghra-FEE" },
+            "σκοπέω": { classical: "sko-PE-oh", modern: "sko-PE-o" },
+            "τηλε": { classical: "TAY-le", modern: "TEE-le" },
+            "αὐτός": { classical: "au-TOS", modern: "af-TOS" },
+            "νέκρος": { classical: "NEK-ros", modern: "NEK-ros" },
+            "βίος": { classical: "BEE-os", modern: "VEE-os" },
+            "θάνατος": { classical: "THA-na-tos", modern: "THA-na-tos" },
+            "ζωή": { classical: "dzoh-AY", modern: "zo-EE" },
+            "γένος": { classical: "GE-nos", modern: "YE-nos" },
+            "φύσις": { classical: "PHOO-sis", modern: "FEE-sees" },
+            "κίνησις": { classical: "KEE-nay-sis", modern: "KEE-nee-sees" },
+            "στάσις": { classical: "STA-sis", modern: "STA-sees" },
+            "δύναμις": { classical: "DOO-na-mis", modern: "THEE-na-mees" },
+            "τόπος": { classical: "TO-pos", modern: "TO-pos" },
+            "χρόνος": { classical: "KHRO-nos", modern: "HRO-nos" },
+            "μνήμη": { classical: "MNAY-may", modern: "MNEE-mee" },
+            "γλῶσσα": { classical: "GLOHS-sa", modern: "GHLO-sa" },
+            "ὄνομα": { classical: "O-no-ma", modern: "O-no-ma" },
+            "ῥῆμα": { classical: "HRAY-ma", modern: "REE-ma" },
+            "Τιτάν": { classical: "tee-TAN", modern: "tee-TAN" },
+            "Μοῖρα": { classical: "MOY-ra", modern: "MEE-ra" },
+            "Νέμεσις": { classical: "NE-me-sis", modern: "NE-me-sees" },
+            "Νίκη": { classical: "NEE-kay", modern: "NEE-kee" },
+            "Ἔρως": { classical: "E-rohs", modern: "E-ros" },
+            "Χάρων": { classical: "KHA-rohn", modern: "HA-ron" },
+            "Μέδουσα": { classical: "ME-doo-sa", modern: "ME-thoo-sa" },
+            "Μίνωταυρος": { classical: "MEE-noh-tau-ros", modern: "MEE-no-tav-ros" },
+            "Κένταυρος": { classical: "KEN-tau-ros", modern: "KEN-tav-ros" },
+            "Κύκλωψ": { classical: "KOO-klohps", modern: "KEE-klops" },
+            "Σειρήν": { classical: "say-RAYN", modern: "see-REEN" },
+            "Σφίγξ": { classical: "SPHINKS", modern: "SFEENKS" },
+            "Χίμαιρα": { classical: "KHEE-mai-ra", modern: "HEE-me-ra" },
+            "Πήγασος": { classical: "PAY-ga-sos", modern: "PEE-gha-sos" },
+            "Ὑδρᾶ": { classical: "HOOD-ra", modern: "EE-thra" },
+            "Φοῖνιξ": { classical: "PHOY-niks", modern: "FEE-neeks" },
+            "Πέρσευς": { classical: "PER-sews", modern: "PER-sefs" },
+            "Θησεύς": { classical: "thay-SEWS", modern: "thee-SEFS" },
+            "Ἰάσων": { classical: "ee-A-sohn", modern: "ee-A-son" },
+            "Μηδεῖα": { classical: "may-DAY-a", modern: "mee-THEE-a" },
+            "Ἠλέκτρα": { classical: "ay-LEK-tra", modern: "ee-LEK-tra" },
+            "Ὀρέστης": { classical: "o-RES-tays", modern: "o-RES-tees" },
+            "Οἰδίπους": { classical: "oy-DEE-poos", modern: "ee-THEE-poos" },
+            "Ἀντιγόνη": { classical: "an-tee-GO-nay", modern: "an-dee-GO-nee" },
+            "Μενέλαος": { classical: "me-NE-la-os", modern: "me-NE-la-os" },
+            "Ἑλένη": { classical: "he-LE-nay", modern: "e-LE-nee" },
+            "Πρίαμος": { classical: "PREE-a-mos", modern: "PREE-a-mos" },
+            "Ἕκτωρ": { classical: "HEK-tohr", modern: "EK-tor" },
+            "Πάρις": { classical: "PA-ris", modern: "PA-rees" },
+            "Ἀγαμέμνων": { classical: "a-ga-MEM-nohn", modern: "a-gha-MEM-non" },
+            "Αἴας": { classical: "AI-as", modern: "E-as" },
+            "Νέστωρ": { classical: "NES-tohr", modern: "NES-tor" },
+            "Κάδμος": { classical: "KAD-mos", modern: "KATH-mos" },
+            "Δαίδαλος": { classical: "DAI-da-los", modern: "THE-tha-los" },
+            "Ἴκαρος": { classical: "EE-ka-ros", modern: "EE-ka-ros" },
+            "Ὀρφεύς": { classical: "or-PHEWS", modern: "or-FEFS" },
+            "Εὐρυδίκη": { classical: "ew-roo-DEE-kay", modern: "ev-ree-THEE-kee" },
+            "Ῥόδος": { classical: "HRO-dos", modern: "RO-thos" },
+            "Κύπρος": { classical: "KOO-pros", modern: "KEE-pros" },
+            "Λέσβος": { classical: "LES-bos", modern: "LEZ-vos" },
+            "Σάμος": { classical: "SA-mos", modern: "SA-mos" },
+            "Μίλητος": { classical: "MEE-lay-tos", modern: "MEE-lee-tos" },
+            "Ἔφεσος": { classical: "E-phe-sos", modern: "E-fe-sos" },
+            "Ἀλεξάνδρεια": { classical: "a-lek-SAN-dray-a", modern: "a-lek-SAN-three-a" },
+            "Βυζάντιον": { classical: "boo-DZAN-tee-on", modern: "vee-ZAN-dee-on" },
+            "Ἴλιον": { classical: "EE-lee-on", modern: "EE-lee-on" },
+            "Ὄλυμπος": { classical: "O-loom-pos", modern: "O-leem-pos" },
+            "Παρνασσός": { classical: "par-nas-SOS", modern: "par-na-SOS" },
+            "Ἑλικών": { classical: "he-lee-KOHN", modern: "e-lee-KON" },
+            "Στύξ": { classical: "STOOKS", modern: "STEEKS" },
+            "Ἀχερών": { classical: "a-khe-ROHN", modern: "a-he-RON" },
+            "Λήθη": { classical: "LAY-thay", modern: "LEE-thee" },
+            "ἔθνος": { classical: "ETH-nos", modern: "ETH-nos" },
+            "πόλεμος": { classical: "PO-le-mos", modern: "PO-le-mos" },
+            "εἰρήνη": { classical: "ay-RAY-nay", modern: "ee-REE-nee" },
+            "ἀγών": { classical: "a-GOHN", modern: "a-GHON" },
+            "νίκη": { classical: "NEE-kay", modern: "NEE-kee" },
+            "τροφή": { classical: "tro-PHAY", modern: "tro-FEE" },
+            "πλάσμα": { classical: "PLAS-ma", modern: "PLAZ-ma" },
+            "θέσις": { classical: "THE-sis", modern: "THE-sees" },
+            "ἀντί": { classical: "an-TEE", modern: "an-DEE" },
+            "σύν": { classical: "SOON", modern: "SEEN" },
+            "ἀνά": { classical: "a-NA", modern: "a-NA" },
+            "κατά": { classical: "ka-TA", modern: "ka-TA" },
+            "μετά": { classical: "me-TA", modern: "me-TA" },
+            "παρά": { classical: "pa-RA", modern: "pa-RA" },
+            "ὑπέρ": { classical: "hoo-PER", modern: "ee-PER" },
+            "ὑπό": { classical: "hoo-PO", modern: "ee-PO" },
+            "ἐπί": { classical: "e-PEE", modern: "e-PEE" },
+            "περί": { classical: "pe-REE", modern: "pe-REE" },
+            "πρό": { classical: "PRO", modern: "PRO" },
+            "διά": { classical: "dee-A", modern: "thee-A" },
+            "ἀπό": { classical: "a-PO", modern: "a-PO" },
+            "ἐκ": { classical: "EK", modern: "EK" },
+            "ἐν": { classical: "EN", modern: "EN" },
+            "πάντα": { classical: "PAN-ta", modern: "PAN-da" },
+            "πολλά": { classical: "pol-LA", modern: "po-LA" },
+            "πρῶτος": { classical: "PROH-tos", modern: "PRO-tos" },
+            "δεύτερος": { classical: "DEW-te-ros", modern: "THEF-te-ros" },
+            "τελευταῖος": { classical: "te-lew-TAI-os", modern: "te-lef-TE-os" },
+            "ἄριστος": { classical: "A-ris-tos", modern: "A-rees-tos" },
+            "χείρων": { classical: "KHAY-rohn", modern: "HEE-ron" },
+            "κρείττων": { classical: "KRAYT-tohn", modern: "KREET-ton" },
+            "μείζων": { classical: "MAYD-zohn", modern: "MEE-zon" },
+            "ἐλάττων": { classical: "e-LAT-tohn", modern: "e-LA-ton" },
+            "πλείων": { classical: "PLAY-ohn", modern: "PLEE-on" },
+            "μᾶλλον": { classical: "MAL-lon", modern: "MA-lon" },
+            "ἧττον": { classical: "HAYT-ton", modern: "EE-ton" },
+            "ταχύς": { classical: "ta-KHOOS", modern: "ta-HEES" },
+            "βραδύς": { classical: "bra-DOOS", modern: "vra-THEES" },
+            "εὐθύς": { classical: "ew-THOOS", modern: "ef-THEES" },
+            "πλατύς": { classical: "pla-TOOS", modern: "pla-TEES" },
+            "στενός": { classical: "ste-NOS", modern: "ste-NOS" },
+            "βαθύς": { classical: "ba-THOOS", modern: "va-THEES" },
+            "ὑψηλός": { classical: "hoop-say-LOS", modern: "eep-see-LOS" },
+            "κοῖλος": { classical: "KOY-los", modern: "KEE-los" },
+            "κυρτός": { classical: "koor-TOS", modern: "keer-TOS" },
+            "πυκνός": { classical: "pook-NOS", modern: "peek-NOS" },
+            "ἁπλοῦς": { classical: "hap-LOOS", modern: "ap-LOOS" },
+            "διπλοῦς": { classical: "dip-LOOS", modern: "theep-LOOS" },
+            "τριπλοῦς": { classical: "trip-LOOS", modern: "treep-LOOS" },
+            "ξηρός": { classical: "ksay-ROS", modern: "ksee-ROS" },
+            "ὑγρός": { classical: "hoog-ROS", modern: "eeg-ROS" },
+            "γλυκύς": { classical: "gloo-KOOS", modern: "ghlee-KEES" },
+            "πικρός": { classical: "pik-ROS", modern: "peek-ROS" },
+            "λευκός": { classical: "lew-KOS", modern: "lef-KOS" },
+            "μέλας": { classical: "ME-las", modern: "ME-las" },
+            "ἐρυθρός": { classical: "e-rooth-ROS", modern: "e-reeth-ROS" },
+            "χλωρός": { classical: "khloh-ROS", modern: "hlo-ROS" },
+            "ξανθός": { classical: "ksan-THOS", modern: "ksan-THOS" },
+            "κυανός": { classical: "koo-a-NOS", modern: "kee-a-NOS" },
+            "πορφύρα": { classical: "por-PHOO-ra", modern: "por-FEE-ra" },
+            "χρυσός": { classical: "khroo-SOS", modern: "hree-SOS" },
+            "ἄργυρος": { classical: "AR-goo-ros", modern: "AR-yee-ros" },
+            "σίδηρος": { classical: "SEE-day-ros", modern: "SEE-thee-ros" },
+            "χαλκός": { classical: "khal-KOS", modern: "hal-KOS" },
+            "κασσίτερος": { classical: "kas-SEE-te-ros", modern: "ka-SEE-te-ros" },
+            "λίθος": { classical: "LEE-thos", modern: "LEE-thos" },
+            "ὄρος": { classical: "O-ros", modern: "O-ros" },
+            "πέτρα": { classical: "PET-ra", modern: "PET-ra" },
+            "ἄμμος": { classical: "AM-mos", modern: "A-mos" },
+            "πηλός": { classical: "pay-LOS", modern: "pee-LOS" }
+        };
+
+        function getPronunciation(word) {
+            // Try exact match first
+            if (pronunciations[word]) {
+                return pronunciations[word];
+            }
+            // Try lowercase version
+            const lower = word.toLowerCase();
+            for (let key in pronunciations) {
+                if (key.toLowerCase() === lower) {
+                    return pronunciations[key];
+                }
+            }
+            return null;
+        }
+
+        function updateAudioTooltip() {
+            const audioBtn = document.getElementById('audioBtn');
+            if (!audioBtn || !currentWord) return;
+
+            const pron = getPronunciation(currentWord.greek);
+            let tooltipHTML;
+
+            if (pron) {
+                tooltipHTML = `
+                    <div class="tooltip-pron">
+                        <div class="tooltip-label">Classical</div>
+                        <div>${pron.classical}</div>
+                    </div>
+                    <div class="tooltip-pron">
+                        <div class="tooltip-label">Modern</div>
+                        <div>${pron.modern}</div>
+                    </div>
+                `;
+            } else {
+                tooltipHTML = 'Hear Modern Greek pronunciation';
+            }
+
+            audioBtn.querySelector('.tooltip').innerHTML = tooltipHTML;
         }
 
         function getRandomFont() {
@@ -813,7 +1303,7 @@
             transliterationTextEl.textContent = '';
             audioContainerEl.style.display = 'none';
             transliterationEl.classList.remove('revealed');
-            spellingEl.textContent = '';
+            spellingEl.innerHTML = '';
             spellingEl.classList.remove('revealed');
             explanationEl.textContent = '';
             explanationEl.classList.remove('revealed');
@@ -837,11 +1327,12 @@
             transliterationTextEl.textContent = currentWord.transliteration;
             audioContainerEl.style.display = 'inline-flex';
             transliterationEl.classList.add('revealed');
-            spellingEl.textContent = getLetterSpelling(currentWord.greek);
+            spellingEl.innerHTML = getLetterSpelling(currentWord.greek);
             spellingEl.classList.add('revealed');
             explanationEl.textContent = currentWord.explanation;
             explanationEl.classList.add('revealed');
             actionBtn.textContent = 'Next Word';
+            updateAudioTooltip();
 
             // Show Previous link after first reveal
             if (currentIndex >= 0) {
